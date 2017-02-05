@@ -171,8 +171,8 @@ namespace geocoding
 		/// <param name="zipCode">Zip code.</param>
 		public static bool IsZipCode(string zipCode)
 		{
-			//string _usZipRegEx = @"^\d{5}(?:[-\s]\d{4})?$";
-			string _caZipRegEx = @"^([ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ])\ {0,1}(\d[ABCEGHJKLMNPRSTVWXYZ]\d)$";
+			string _usZipRegEx = @"(^\d{5}(-\d{4})?$)|(^[ABCEGHJKLMNPRSTVXY]{1}\d{1}[A-Z]{1} *\d{1}[A-Z]{1}\d{1}$)";
+			string _caZipRegEx =  @"^[ABCEGHJKLMNPRSTVXY]{1}\d{1}[A-Z]{1} *\d{1}[A-Z]{1}\d{1}$";
 			bool validZipCode = true;
 			//if ((!Regex.Match(zipCode, _usZipRegEx).Success) && (!Regex.Match(zipCode, _caZipRegEx).Success))
 			if (!Regex.Match(zipCode.ToUpper(), _caZipRegEx).Success)	
