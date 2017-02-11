@@ -16,17 +16,17 @@ namespace geocoding
 			GeoPoint gp = new GeoPoint();
 			Boolean hasGeo = false;
 			dynamic resultData;
-			Console.Clear();
+			DelaySec();
 			Console.WriteLine("Welcome to geocoding service.");
 			Console.WriteLine("Please enter the country name:");
 			String queryCountry = Console.ReadLine();
 			Console.WriteLine("Please enter the zipcode:");
 			String queryZip  = Console.ReadLine().Trim().Replace(" ", string.Empty); //
-			//Console.WriteLine("Zipcode parsing: " + queryZip);
-
-			if (IsZipCode(queryZip))	//verify zipcode
+			
+			//Verify zipcode
+			if (IsZipCode(queryZip))	
 			{
-				
+				//Query YQL 1st if no rsult then google if no result then geocoder.ca.
 				//1. YQL API query, parsing json result.
 				try
 				{
@@ -45,6 +45,7 @@ namespace geocoding
 					gp.city = resultData.query.results.place.admin2.content;
 					gp.lat = resultData.query.results.place.centroid.latitude;
 					gp.lon = resultData.query.results.place.centroid.longitude;
+					gp.errmsg = "";
 					//Console.WriteLine("==========   YQL result   =============");
 					//Console.WriteLine("zipcode: " + gp.zipcode);
 					//Console.WriteLine("country: " + gp.country);
@@ -56,8 +57,8 @@ namespace geocoding
 				}
 				catch (Exception e)
 				{
+					gp.errmsg = e.Message.ToString();
 					Console.WriteLine(e.Message);
-
 				}
 				finally { }//end YQL api
 
@@ -84,6 +85,7 @@ namespace geocoding
 						gp.city = resultData.results[0].address_components[2].long_name;
 						gp.lat = resultData.results[0].geometry.location.lat;
 						gp.lon = resultData.results[0].geometry.location.lng;
+						gp.errmsg = "";
 						//Console.WriteLine("==========   Google result   =============");
 						//Console.WriteLine("zipcode: " + gp.zipcode);
 						//Console.WriteLine("country: " + gp.country);
@@ -95,6 +97,7 @@ namespace geocoding
 					}
 					catch (Exception e)
 					{
+						gp.errmsg = e.Message.ToString();
 						Console.WriteLine(e.Message);
 					}
 					finally { }
@@ -119,6 +122,7 @@ namespace geocoding
 						gp.city = resultData.standard.city;
 						gp.lat = resultData.latt;
 						gp.lon = resultData.longt;
+						gp.errmsg = "";
 						//Console.WriteLine("==========   geocoder.ca result   =============");
 						//Console.WriteLine("zipcode: " + gp.zipcode);
 						//Console.WriteLine("provence code: " + gp.prov_code);
@@ -129,12 +133,15 @@ namespace geocoding
 					}
 					catch (Exception e)
 					{
+						gp.errmsg = e.Message.ToString();
 						Console.WriteLine(e.Message);
 					}
 					finally { }
 				}//end geocoder.ca api
 			}
+			//zip code is Invalid.
 			else { 
+				gp.errmsg = "nvalid Zip Code";
 				Console.WriteLine("Invalid Zip Code");
 			}
 
@@ -181,45 +188,20 @@ namespace geocoding
 			}
 			return validZipCode;
 		}
+		
+		/// <summary>
+		/// Delay timmer to prevent web API denny
+		/// </summary>
+		/// <returns></returns>
+		public static async Task DelaySec()
+		{
+			await Task.Run(async () => 
+			{
+				Console.WriteLine("Start Delay");
+				await Task.Delay(1000);
+				Console.WriteLine("End Delay");
+			});
+		}
+
 	}//end mainclass
-
 }//end namespace
-
-
-		// /// <summary>
-		// /// Downloads the serialized json string. Using WebClient()
-		// /// </summary>
-		// /// <returns>The serialized json data.</returns>
-		// /// <param name="url">URL.</param>
-		// public static string download_serialized_json_data(string url)
-		// {
-		// 	var json_data = string.Empty;// attempt to download JSON data as a string
-
-		// 	using (var w = new WebClient())
-		// 	{
-		// 		try
-		// 		{
-		// 			// HTTP GET
-		// 			w.UseDefaultCredentials = true;
-		// 			json_data = w.DownloadString(url);
-
-		// 		}
-		// 		catch (WebException ex)
-		// 		{
-		// 			// Http Error
-		// 			if (ex.Status == WebExceptionStatus.ProtocolError)
-		// 			{
-		// 				HttpWebResponse wrsp = (HttpWebResponse)ex.Response;
-		// 				var statusCode = (int)wrsp.StatusCode;
-		// 				var msg = wrsp.StatusDescription;
-		// 				throw new HttpException(statusCode, msg);
-		// 			}
-		// 			else
-		// 			{
-		// 				throw new HttpException(500, ex.Message);
-		// 			}
-
-		// 		}
-		// 		return json_data;
-		// 	}
-		// }
