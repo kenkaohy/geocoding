@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Text;
 using System.Net.Http;
-//using System.Net;
-//using System.Web;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
@@ -46,13 +44,13 @@ namespace geocoding
 					gp.lat = resultData.query.results.place.centroid.latitude;
 					gp.lon = resultData.query.results.place.centroid.longitude;
 					gp.errmsg = "";
-					//Console.WriteLine("==========   YQL result   =============");
-					//Console.WriteLine("zipcode: " + gp.zipcode);
-					//Console.WriteLine("country: " + gp.country);
-					//Console.WriteLine("provence: " + gp.provence);
-					//Console.WriteLine("city: " + gp.city);
-					//Console.WriteLine("latitude: " + gp.lat);
-					//Console.WriteLine("longitude: " + gp.lon);
+					Console.WriteLine("==========   YQL result   =============");
+					Console.WriteLine("zipcode: " + gp.zipcode);
+					Console.WriteLine("country: " + gp.country);
+					Console.WriteLine("provence: " + gp.provence);
+					Console.WriteLine("city: " + gp.city);
+					Console.WriteLine("latitude: " + gp.lat);
+					Console.WriteLine("longitude: " + gp.lon);
 					hasGeo = true;
 				}
 				catch (Exception e)
@@ -86,13 +84,13 @@ namespace geocoding
 						gp.lat = resultData.results[0].geometry.location.lat;
 						gp.lon = resultData.results[0].geometry.location.lng;
 						gp.errmsg = "";
-						//Console.WriteLine("==========   Google result   =============");
-						//Console.WriteLine("zipcode: " + gp.zipcode);
-						//Console.WriteLine("country: " + gp.country);
-						//Console.WriteLine("provence: " + gp.provence);
-						//Console.WriteLine("city: " + gp.city);
-						//Console.WriteLine("latitude: " + gp.lat);
-						//Console.WriteLine("longitude: " + gp.lon);
+						Console.WriteLine("==========   Google result   =============");
+						Console.WriteLine("zipcode: " + gp.zipcode);
+						Console.WriteLine("country: " + gp.country);
+						Console.WriteLine("provence: " + gp.provence);
+						Console.WriteLine("city: " + gp.city);
+						Console.WriteLine("latitude: " + gp.lat);
+						Console.WriteLine("longitude: " + gp.lon);
 						hasGeo = true;
 					}
 					catch (Exception e)
@@ -123,12 +121,12 @@ namespace geocoding
 						gp.lat = resultData.latt;
 						gp.lon = resultData.longt;
 						gp.errmsg = "";
-						//Console.WriteLine("==========   geocoder.ca result   =============");
-						//Console.WriteLine("zipcode: " + gp.zipcode);
-						//Console.WriteLine("provence code: " + gp.prov_code);
-						//Console.WriteLine("city: " + gp.city);
-						//Console.WriteLine("latitude: " + gp.lat);
-						//Console.WriteLine("longitude: " + gp.lon);
+						Console.WriteLine("==========   geocoder.ca result   =============");
+						Console.WriteLine("zipcode: " + gp.zipcode);
+						Console.WriteLine("provence code: " + gp.prov_code);
+						Console.WriteLine("city: " + gp.city);
+						Console.WriteLine("latitude: " + gp.lat);
+						Console.WriteLine("longitude: " + gp.lon);
 						hasGeo = true;
 					}
 					catch (Exception e)
@@ -148,10 +146,10 @@ namespace geocoding
 		}//end main
 
 		/// <summary>
-		/// get geo infomation by json format. Using HettpClient()
+		/// get geographical infomation by json format.
 		/// </summary>
 		/// <param name="url"></param>
-		/// <returns></returns>
+		/// <returns>geo_json</returns>
 		public static async Task<string> download_geo_date(string url)
 		{
 			var geo_json = string.Empty;
@@ -161,7 +159,7 @@ namespace geocoding
 				try
 				{
 					geo_json =  await client.GetStringAsync(url);
-					Console.WriteLine(geo_json);
+					//Console.WriteLine(geo_json);
 				}catch(HttpRequestException e)
 				{
 					Console.WriteLine($"Request exception: {e.Message}");
