@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace geocoding
 {
@@ -57,8 +58,7 @@ namespace geocoding
 				{
 					gp.errmsg = e.Message.ToString();
 					Console.WriteLine(e.Message);
-				}
-				finally { }//end YQL api
+				}//end YQL api
 
 				//2. Google API query, parsing json result.
 				if (!hasGeo)
@@ -98,7 +98,6 @@ namespace geocoding
 						gp.errmsg = e.Message.ToString();
 						Console.WriteLine(e.Message);
 					}
-					finally { }
 				}//end google api
 
 				//3. geocoder.ca API query, parsing json result.
@@ -134,7 +133,6 @@ namespace geocoding
 						gp.errmsg = e.Message.ToString();
 						Console.WriteLine(e.Message);
 					}
-					finally { }
 				}//end geocoder.ca api
 			}
 			//zip code is Invalid.
