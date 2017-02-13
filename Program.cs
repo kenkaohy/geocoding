@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Text;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
-using Microsoft.EntityFrameworkCore;
 
 namespace geocoding
 {
@@ -197,6 +197,43 @@ namespace geocoding
 				await Task.Delay(1000);
 				Console.WriteLine("End Delay");
 			});
+		}
+
+		/// <summary>
+		/// SQLite database insert example.
+		/// </summary>
+		/// <param name="GeoList"></param>
+		public static void updateSQLite(List<GeoPoint> GeoList)
+		{
+            using (var db = new GeoContext())
+            {
+				foreach (var gp in GeoList)
+				{
+					var Postcode = new Postcode() 
+					{ 
+						country_code = gp.country,
+						postal_code = gp.zipcode,
+						place_name = gp.zipcode,
+						state = gp.zipcode,
+						state_code = gp.zipcode,
+						county = gp.zipcode,
+						county_code = gp.country,
+						latitude = gp.lat.ToString(),
+						longitude = gp.lon.ToString(),
+						//accuracy = gp.zipcode,				
+					};
+					db.Postcodes.Add(Postcode);
+				}
+							
+                //db.Postcodes.Add(new Postcode { Url = "http://blogs.msdn.com/adonet" });
+                var count = db.SaveChanges();
+                Console.WriteLine("{0} records saved to database", count);
+                Console.WriteLine("All blogs in database:");
+                // foreach (var pc in db.Blogs)
+                // {
+                //     Console.WriteLine(" - {0}", blog.Url);
+                // }
+            }
 		}
 
 	}//end mainclass

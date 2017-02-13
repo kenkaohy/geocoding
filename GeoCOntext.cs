@@ -7,5 +7,4 @@ public class GeoContext : DbContext
     {
         optionsBuilder.UseSqlite("Filename=./BRIDGEPOINT.db");
     }
-
 }
